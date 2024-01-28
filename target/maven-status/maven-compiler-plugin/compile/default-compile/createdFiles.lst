@@ -1,0 +1,7 @@
+br\com\hegom\mail\repository\MailRepository.class
+br\com\hegom\mail\controllers\MailController.class
+br\com\hegom\mail\repository\TypeStatus.class
+br\com\hegom\mail\services\MailService.class
+br\com\hegom\mail\payload\MailDto.class
+br\com\hegom\mail\MailSenderApplication.class
+br\com\hegom\mail\models\Mail.class

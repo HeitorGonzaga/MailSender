@@ -31,25 +31,28 @@ public class MailService {
         return this.repository.findByCreateDate(date);
     }
 
-    @Scheduled(fixedRate = 15000)
+    @Scheduled(fixedRate = 100000)
     public void sendEmail(){
-        Mail inFileMail = this.repository.findByStatus(TypeStatus.WAITING);
-        if(inFileMail!=null){
-            try{
-                MimeMessage message = emailSender.createMimeMessage();
-                MimeMessageHelper helper = new MimeMessageHelper(message, true);
-                helper.setFrom(inFileMail.getSender());
-                helper.setTo(inFileMail.getReceiver());
-                helper.setSubject(inFileMail.getSubject());
-                helper.setText(inFileMail.getText(), true);
-                this.emailSender.send(message);
-                inFileMail.setStatus(TypeStatus.SENT);
-            }catch (Exception e){
-                inFileMail.setStatus(TypeStatus.FAILED);
-            }finally {
-                this.repository.save(inFileMail);
+        List<Mail> list = this.repository.findByStatus(TypeStatus.WAITING);
+        list.forEach((inFileMail)-> {
+            if(inFileMail!=null){
+                try{
+                    MimeMessage message = emailSender.createMimeMessage();
+                    MimeMessageHelper helper = new MimeMessageHelper(message, true);
+                    helper.setFrom(inFileMail.getSender());
+                    helper.setTo(inFileMail.getReceiver());
+                    helper.setSubject(inFileMail.getSubject());
+                    helper.setText(inFileMail.getText(), true);
+                    this.emailSender.send(message);
+                    inFileMail.setStatus(TypeStatus.SENT);
+                }catch (Exception e){
+                    System.out.println(e);
+                    inFileMail.setStatus(TypeStatus.FAILED);
+                }finally {
+                    this.repository.save(inFileMail);
+                }
             }
-        }
+        });
     }
 
 }

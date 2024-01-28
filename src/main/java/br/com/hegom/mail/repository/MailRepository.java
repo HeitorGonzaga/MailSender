@@ -10,5 +10,5 @@ import java.util.List;
 public interface MailRepository extends JpaRepository<Mail, Long> {
     List<Mail> findByCreateDate(LocalDate createDate);
 
-    Mail findByStatus(TypeStatus status);
+    List<Mail> findByStatus(TypeStatus status);
 }
